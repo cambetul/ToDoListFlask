@@ -1,5 +1,5 @@
 from datetime import  datetime
-from flask import render_template, current_app, request, redirect,  url_for,  session
+from flask import render_template, current_app, request, redirect,  url_for,  session, jsonify
 import mysql.connector
 from user import User
 from list import List
@@ -27,7 +27,7 @@ def lists_page(): # kullanıcının listelerini sırala ve tıklayınca listeye 
     if 'user_id' in session:
         if request.method == "GET":
             db = getDb()
-            lists = db.get_lists()
+            lists = db.GetAllList()
             return render_template("lists.html", lists=lists)
         else: #delete
             form_list_keys = request.form.getlist("list_keys")
@@ -152,3 +152,55 @@ def login_page():
 def logout():
     session.clear()
     return redirect(url_for('login_page'))
+
+def deleteTask():
+    if request.method == 'POST':
+        taskId = request.form['TaskId']
+        db = getDb()
+        db.DeleteTask(taskId)
+    return jsonify(success=True) #başarılı mesajı dön
+
+def SetTaskStatus():
+    if request.method == 'POST':
+        task_Id = request.form['TaskId']
+        db = getDb()
+        db.SetTaskStatus(task_Id)
+    return jsonify(success=True) #başarılı mesajı dön
+
+def AssignToMe():
+    if request.method == 'POST':
+        task_id = request.form['TaskId']
+        db = getDb()
+        db.AssignToMe(task_id)
+    return jsonify(success=True) #başarılı mesajı dön
+    
+    
+def AddMember():
+    db = getDb()
+    message = ''
+    if request.method == 'POST':
+        list_id = request.form['list_id']
+        member_email = request.form['member_email']
+        user = db.GetUser(member_email.strip())
+        if(user is None):
+            message = 'There is no user registered with this email.'
+        elif(db.IsUserInList(list_id,user['UserId'])):
+            message = 'This user is already in list.'
+        else:
+            db.AddMember(list_id, user['UserId'])
+            message = 'User is added to list successfully'
+        
+    lists = db.get_lists()
+    return render_template("add_member.html", lists=lists, message = message)
+            
+
+
+def DeleteList():
+    db=getDb()
+    if(request.method == 'POST'):
+        list_id = request.form['ListId']
+        db.DeleteList(list_id)
+    
+    return jsonify(success=True) #başarılı mesajı dön
+
+

@@ -1,6 +1,88 @@
 {% extends "layout.html" %}
 {% block title %}asd{% endblock %}
 {% block content %}
+<html>
+<head>
+  <script>
+    $(document).ready(function () { // HTML yüklenince çalıştır
+      $(".btnDeleteTask").click(function (e) { // btnDeleteTask class'ı olan button'lara tıklanınca çalıştır
+
+          var taskId = $(e.target).val(); // button'un value değerini al ve taskId'ye ata
+
+          var request = { // request objesi oluşturuldu
+              TaskId : taskId, // request obje property'si = butonun value'su 
+          }; 
+
+          $.ajax({ // POST METODU GÖNDER
+              type: "POST",
+              url: "/delete-task",
+              data: request
+          }).done(function () { // BAŞARILI OLUNCA
+            window.location.reload(); // Sayfayı yenile
+          }).fail(function (response) { // HATA ALINCA
+            alert("Task failed to be deleted"); // Hata alındı mesajı ver
+          });
+      });
+
+      // ---------------------------------------------------------------------------------
+
+      $('.checkBoxIsCompleted').change(function(e) {
+
+        if(!confirm('Did you completed this task ? '))
+        {
+          this.checked = !this.checked; // checkbox değerini tersle
+          return;
+        }
+     
+
+        var taskId = $(e.target).val(); 
+
+        var request = {
+            TaskId : taskId,
+        };
+
+        $.ajax({ // POST METODU GÖNDER
+              type: "POST",
+              url: "/set-task-status",
+              data: request
+          }).done(function () { // BAŞARILI OLUNCA
+            window.location.reload(); // Sayfayı yenile
+          }).fail(function (response) { // HATA ALINCA
+            alert("failed to set status"); // Hata alındı mesajı ver
+          });
+      });
+
+      // ---------------------------------------------------------------------------------
+
+    $('.checkBoxAssignToMe').change(function(e) {
+
+      if(!confirm('Do you want to take this task ? '))
+        {
+          this.checked = !this.checked; // checkbox değerini tersle
+          return;
+        }
+     
+
+        var taskId = $(e.target).val(); 
+
+        var request = {
+            TaskId : taskId,
+        };
+
+        $.ajax({ // POST METODU GÖNDER
+              type: "POST",
+              url: "/assign-to-me",
+              data: request
+          }).done(function () { // BAŞARILI OLUNCA
+            window.location.reload(); // Sayfayı yenile
+          }).fail(function (response) { // HATA ALINCA
+            alert("failed to set status"); // Hata alındı mesajı ver
+          });
+    });
+  });
+
+</script>
+</head>
 <h1 class="title">List {{listName}}</h1>
 <table class="table">
   {% for task in tasks %}
@@ -8,6 +90,30 @@
     <td>
         {{ task['Content'] }}
         ({{ task['Point'] }})
+    </td>
+    <td>
+      <div style="font-size:small;" {%if task['AssignedUserId'] != None %} hidden {%endif %} >
+        <input  type="checkbox" class="checkBoxAssignToMe" value="{{task['TaskId']}}">
+        <label for="assignToMe">Assign to me</label>
+      </div>
+  </td>
+  <td>
+    <div style="font-size:small;">
+      <input {%if task['IsCompleted'] %} checked disabled {%endif %} 
+      {%if task['IsTaskAssignedToMe'] == 0 %} disabled {%endif %}  
+      type="checkbox" class="checkBoxIsCompleted" value="{{task['TaskId']}}">
+      <label for="isCompleted">Completed</label>
+    </div>
+</td>
+  <td>
+    <div style="font-size:small;">
+      <strong>
+        {%if task['TaskOwnerName'] != None %} ({{ task['TaskOwnerName']}})  {%endif %}
+      </strong>
+    </div>
+  </td>
+    <td>
+        <button name="btnDelete" class="btnDeleteTask" value="{{task['TaskId']}}">Delete</button>
     </td>
   </tr>
   {% endfor %}
@@ -28,7 +134,7 @@
       </div>
       <div class="field">
         <label for="point" class="label">Point</label>
-        <div class="control">
+        <div id="test" class="control">
           <input type="number" name="point" class="input"
                  min="0" max="10"/>
     </div>
@@ -41,3 +147,6 @@
 </form>
 <p> {{error}} </p>
 {% endblock %}
+
+</html>
+

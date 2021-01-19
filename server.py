@@ -24,6 +24,16 @@ def create_app():
     app.add_url_rule("/tasks", view_func=views.task_page, methods=["GET", "POST"])
     app.add_url_rule("/add-list", view_func=views.list_add_page, methods=["GET","POST"])
     app.add_url_rule("/register",view_func=views.register_page,methods=["GET","POST"])
+    app.add_url_rule("/delete-task",view_func=views.deleteTask,methods=["GET","POST"])
+    app.add_url_rule("/assign-to-me",view_func=views.AssignToMe,methods=["GET","POST"])
+    app.add_url_rule("/set-task-status",view_func=views.SetTaskStatus,methods=["GET","POST"])
+    app.add_url_rule("/add-member",view_func=views.AddMember,methods=["GET","POST"])
+    app.add_url_rule("/delete-list",view_func=views.DeleteList,methods=["POST"])
+
+
+
+
+
     # app.add_url_rule("/test",view_func=views.home_page,methods=["GET","POST"])
     app.add_url_rule("/logout",view_func=views.logout,methods=["GET","POST"])
 
@@ -42,4 +52,4 @@ if __name__ == "__main__":
 
 @app.errorhandler(404)
 def error_not_found(error):
-    return render_template('error.html'),404
+    return render_template  ('error.html'),404

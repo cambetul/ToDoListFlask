@@ -93,6 +93,9 @@ class Database:
         cursor.execute(sql, (newList.title, newList.dueDate, userId))
         self.db.commit()
         if cursor.rowcount:
+            sql = "INSERT INTO listmembers SET ListId = %s, UserId = %s"
+            cursor.execute(sql, (cursor.lastrowid, userId))
+            self.db.commit()
             return True
         else:
             return False
@@ -109,10 +112,91 @@ class Database:
 
     def GetTasks(self, listId):
         cursor = self.db.cursor(dictionary=True)
-        sql = "SELECT * FROM task WHERE ListId = %s"
-        cursor.execute(sql, (listId,))
+        user_id = session['user_id']
+        sql =   "SELECT CONCAT(taskOwner.Name,' ',taskOwner.LastName) as TaskOwnerName, t.Content, t.Point, t.IsCompleted, t.AssignedUserId, t.ListId, t.TaskId, " \
+                "CASE WHEN l.OwnerId = %s THEN 1 ELSE 0 " \
+                "END As IsListOwner, " \
+                "CASE WHEN t.AssignedUserId = %s THEN 1 " \
+                "ELSE 0 " \
+                "END As IsTaskAssignedToMe " \
+                "FROM `task` t " \
+                "JOIN list l on l.ListId = t.ListId "  \
+                "LEFT JOIN `user` taskOwner on taskOwner.UserId = t.`AssignedUserId` "  \
+                "where l.ListId = %s" 
+        cursor.execute(sql, (user_id,user_id,listId,))
         tasks = cursor.fetchall()
         return tasks
+    
+    def DeleteTask(self,taskId):
+        cursor = self.db.cursor(dictionary=True)
+        sql = "DELETE FROM task WHERE TaskId = %s"
+        cursor.execute(sql, (taskId,))
+        self.db.commit()   
+
+
+    def AssignToMe(self,task_id):
+        cursor = self.db.cursor(dictionary=True)
+        user_id = session['user_id']
+        sql = "UPDATE task SET AssignedUserId = %s WHERE TaskId = %s"
+        cursor.execute(sql, (user_id,task_id,)) # db'de işlemi gerçekleştir
+        self.db.commit() # db'de işlemi tamamla  
+
+    def SetTaskStatus(self,task_id):
+        cursor = self.db.cursor(dictionary=True)
+        sql = "UPDATE task SET IsCompleted = true where TaskId = %s"
+        cursor.execute(sql, (task_id,))
+        user_id = session['user_id']
+        self.db.commit() # db'de işlemi tamamla  
+
+    def AddMember(self,list_id,user_id):
+        cursor = self.db.cursor(dictionary=True)
+        sql = "INSERT INTO listmembers Set UserId = %s, ListId = %s"
+        cursor.execute(sql, (user_id, list_id))
+        self.db.commit()
+
+    def IsUserInList(self,list_id,user_id):
+        cursor = self.db.cursor(dictionary=True)
+        sql = "SELECT * FROM listmembers WHERE UserId = %s AND ListId = %s"
+        cursor.execute(sql, (user_id,list_id,))
+        user = cursor.fetchone()
+        if(user is None):
+            return False
+        else:
+            return True 
+
+    def GetUser(self,email):
+        cursor = self.db.cursor(dictionary=True)
+        sql = "SELECT * FROM user WHERE Email = %s"
+        cursor.execute(sql, (email,))
+        user = cursor.fetchone()
+        return user
+        
+    def GetAllList(self):
+        cursor = self.db.cursor(dictionary=True)    
+        sql = "SELECT l.* from listmembers lm "  \
+              "JOIN list l on lm.ListId = l.ListId " \
+              "where lm.UserId = %s" 
+        user_id = session['user_id']
+        cursor.execute(sql, (user_id,))
+        lists = cursor.fetchall()
+        return lists
+
+
+    def DeleteList(self,list_id):
+        cursor = self.db.cursor(dictionary=True)
+        sql = "DELETE FROM list WHERE ListId = %s"
+        cursor.execute(sql, (list_id,))
+        self.db.commit()
+
+        sql = "DELETE FROM task WHERE ListId = %s"
+        cursor.execute(sql, (list_id,))
+        self.db.commit()
+
+        sql = "DELETE FROM listmembers WHERE ListId = %s"
+        cursor.execute(sql, (list_id,))
+        self.db.commit()
+        
+
 
 
     # def add_user(new_user):
