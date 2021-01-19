@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block title %}Sign in{% endblock %}
+{% block content %}
+<p>
+    {{error}}
+</p>
+    <h1>Sign in</h1>
+    <form action="" method="post" name="login">
+        <div>
+            <label for="mail">E-mail:</label>
+            <div class="control">
+                <input type="text" name="email">
+            </div>
+        </div>
+        <div class="field">
+            <label for="password">Password:</label>
+            <div>
+                <input type="password" name="password">
+            </div>
+        </div>
+        <div class="field is-grouped">
+            <div class="control">
+              <button class="button is-primary is-small">Login</button>
+            </div>
+        </div>
+        
+    </form>
+    <p>Don't you have an account?</p>
+    <a href ="{{url_for('register_page') }}">Sign up for TODOLIST!</a>
+
+{% endblock %}

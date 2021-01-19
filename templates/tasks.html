@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}asd{% endblock %}
+{% block content %}
+<h1 class="title">List {{listName}}</h1>
+<table class="table">
+  {% for task in tasks %}
+  <tr>
+    <td>
+        {{ task['Content'] }}
+        ({{ task['Point'] }})
+    </td>
+  </tr>
+  {% endfor %}
+
+</table>
+
+
+
+<p>Add Task</p>
+    <form action="" method="post" name="task_edit">
+      <input type="number" 
+      name="listId" hidden class="input" value="{{listId}}" required="required"/>
+      <div class="field">
+        <label for="content" class="label">Content</label>
+        <div class="control">
+          <input type="text" name="content" class="input" required="required"/>
+        </div>
+      </div>
+      <div class="field">
+        <label for="point" class="label">Point</label>
+        <div class="control">
+          <input type="number" name="point" class="input"
+                 min="0" max="10"/>
+    </div>
+  </div>
+  <div class="field is-grouped">
+    <div class="control">
+      <button type = "submit"class="button is-primary is-small">Save</button>
+    </div>
+  </div>
+</form>
+<p> {{error}} </p>
+{% endblock %}

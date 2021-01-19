@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block title %}Sign up{% endblock %}
+{% block content %}
+
+<p>
+    {{ error }} 
+</p>
+    <h1>Sign up</h1>
+    <form action="" method="post" Name="register">
+        <div>
+            <label for="name">name:</label>
+            <div>
+                <input type="text" name="name" class="input" required="required"/>
+            </div>
+        </div>
+        <div class="field">
+            <label for = "surname">Surname:</label>
+            <div>
+                <input type="text" name="lastname">
+            </div>
+        </div>  
+        <div>
+            <label for="mail">E-mail:</label>
+            <div class="control">
+                <input type="text" name="email">
+            </div>
+        </div>
+        <div class="field">
+            <label for="password">Password:</label>
+            <div>
+                <input type="password" name="password">
+            </div>
+        </div>
+        <div class="field">
+            <label for="password">Password (again):</label>
+            <div>
+                <input type="password" name="re_password">
+            </div>
+        </div>
+
+        <div class="field is-grouped">
+            <div class="control">
+              <button class="button is-primary is-small">Save</button>
+            </div>
+        </div>
+    </form>
+    <p>Do you have an account?</p>
+    <a href ="{{url_for('login_page') }}">Sign in.</a>
+    {% endblock %}

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>My lists - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='todolist.css') }}"/>
+  </head>
+  <body>
+    <div class="sidenav">
+      <a class="active" href="{{ url_for('home_page')}}">Home</a>
+      <a href="{{ url_for('lists_page') }}">Lists</a>
+      <a href="{{url_for('list_add_page') }}">Add List </a></a>
+      <a href="{{url_for('register_page') }}">Sign up </a></a>
+      <a href ="{{url_for('login_page') }}">Sign in</a>
+    </div>
+    <div class="main">
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>

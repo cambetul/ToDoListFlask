@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block title %}Add List{% endblock %}
+{% block content %}
+  <h1>Add List</h1>
+  <form action="" method="post" name="list_edit">
+    <div class="field">
+      <label for="title" class="label">Title:</label>
+        <div class="control">
+          <input type="text" name="title" class="input" required="required"/>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="year" class="label">Due date:</label>
+        <div class="control">
+          <input type="number" name="year" class="input"
+                min="{{ min_year}}"/>
+        </div>
+      </div>
+
+      <div class="field is-grouped">
+        <div class="control">
+          <button type = "submit" class="button is-primary is-small">Save</button>
+        </div>
+    </div>
+  </form>
+  <p> {{error}} </p>
+{% endblock %}
