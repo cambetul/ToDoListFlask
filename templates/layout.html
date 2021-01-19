@@ -7,11 +7,15 @@
   </head>
   <body>
     <div class="sidenav">
+      {% if 'user_id' in session %}
       <a class="active" href="{{ url_for('home_page')}}">Home</a>
       <a href="{{ url_for('lists_page') }}">Lists</a>
-      <a href="{{url_for('list_add_page') }}">Add List </a></a>
+      <a href="{{url_for('list_add_page') }}">Add list </a></a>
+      <a href="{{ url_for('logout') }}">Sign out</a>
+      {% else %}
       <a href="{{url_for('register_page') }}">Sign up </a></a>
       <a href ="{{url_for('login_page') }}">Sign in</a>
+      {% endif %}
     </div>
     <div class="main">
       {% block content %}{% endblock %}

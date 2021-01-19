@@ -25,7 +25,7 @@ def create_app():
     app.add_url_rule("/add-list", view_func=views.list_add_page, methods=["GET","POST"])
     app.add_url_rule("/register",view_func=views.register_page,methods=["GET","POST"])
     # app.add_url_rule("/test",view_func=views.home_page,methods=["GET","POST"])
-
+    app.add_url_rule("/logout",view_func=views.logout,methods=["GET","POST"])
 
     db = Database()
     app.config["db"] = db   #store the database object in the configuration to make it accessible to all components in the application

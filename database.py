@@ -15,7 +15,7 @@ class Database:
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="root",
+            password="",
             database='todoapp'
         )
 
