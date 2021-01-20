@@ -50,6 +50,6 @@ if __name__ == "__main__":
     port = app.config.get("PORT", 5000)
     app.run(host="localhost",debug=True)
 
-@app.errorhandler(404)
-def error_not_found(error):
-    return render_template  ('error.html'),404
+# @app.errorhandler(404)
+# def error_not_found(error):
+#     return render_template  ('error.html'),404
