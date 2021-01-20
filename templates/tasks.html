@@ -34,7 +34,6 @@
           return;
         }
      
-
         var taskId = $(e.target).val(); 
 
         var request = {
@@ -48,7 +47,7 @@
           }).done(function () { // BAŞARILI OLUNCA
             window.location.reload(); // Sayfayı yenile
           }).fail(function (response) { // HATA ALINCA
-            alert("failed to set status"); // Hata alındı mesajı ver
+            alert("Failed to set status."); // Hata alındı mesajı ver
           });
       });
 
@@ -83,7 +82,7 @@
 
 </script>
 </head>
-<h1 class="title">List {{listName}}</h1>
+<h1 class="title">List: {{listName}}</h1>
 <table class="table">
   {% for task in tasks %}
   <tr>
@@ -92,10 +91,17 @@
         ({{ task['Point'] }})
     </td>
     <td>
-      <div style="font-size:small;" {%if task['AssignedUserId'] != None %} hidden {%endif %} >
+      {%if task['AssignedUserId'] != None %} 
+      <div style="font-size:small;"  hidden  >
         <input  type="checkbox" class="checkBoxAssignToMe" value="{{task['TaskId']}}">
         <label for="assignToMe">Assign to me</label>
       </div>
+      {%else %}
+      <div style="font-size:small;" >
+        <input  type="checkbox" class="checkBoxAssignToMe" value="{{task['TaskId']}}">
+        <label for="assignToMe">Assign to me</label>
+      </div>
+      {% endif %}
   </td>
   <td>
     <div style="font-size:small;">
@@ -119,8 +125,6 @@
   {% endfor %}
 
 </table>
-
-
 
 <p>Add Task</p>
     <form action="" method="post" name="task_edit">

@@ -6,27 +6,12 @@ import hashlib
 
 class Database:
     def __init__(self):# constructor
-        self.lists = {} # dictionary
-        self.tasks = {} # dictionary
-        self.users = {} # dictionary
-        self._last_list_key = 0
-        self.last_task_key = 0
-        self.last_user_key = 0
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
             password="",
             database='todoapp'
         )
-
-    def add_list(self, list):
-        self._last_list_key += 1 # array gibi dusun, eleman sayisini arttirdi
-        self.lists[self._last_list_key] = list #lists in ilk elemani list oldu
-        return self._last_list_key
-
-    def delete_list(self, list_key):
-        if list_key in self.lists:
-            del self.lists[list_key]
 
     def md5(self,string):
         return hashlib.md5(string.encode()).hexdigest()
@@ -144,7 +129,6 @@ class Database:
         cursor = self.db.cursor(dictionary=True)
         sql = "UPDATE task SET IsCompleted = true where TaskId = %s"
         cursor.execute(sql, (task_id,))
-        user_id = session['user_id']
         self.db.commit() # db'de işlemi tamamla  
 
     def AddMember(self,list_id,user_id):

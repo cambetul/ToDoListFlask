@@ -3,14 +3,6 @@ import views
 from database import Database
 from list import List
 import mysql.connector
-#from flask_login import LoginManager
-
-    
-
-#lm = LoginManager()
-#@lm.user_loader
-# def load_user(user_id):
-#     return get_user(user_id)
 
 def create_app():
     app = Flask(__name__)
@@ -29,12 +21,6 @@ def create_app():
     app.add_url_rule("/set-task-status",view_func=views.SetTaskStatus,methods=["GET","POST"])
     app.add_url_rule("/add-member",view_func=views.AddMember,methods=["GET","POST"])
     app.add_url_rule("/delete-list",view_func=views.DeleteList,methods=["POST"])
-
-
-
-
-
-    # app.add_url_rule("/test",view_func=views.home_page,methods=["GET","POST"])
     app.add_url_rule("/logout",view_func=views.logout,methods=["GET","POST"])
 
     db = Database()

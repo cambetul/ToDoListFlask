@@ -6,7 +6,6 @@ from list import List
 from task import Task
 import hashlib
 
-# db = current_app.config["db"]
 def getDb():
     return current_app.config["db"]
 
@@ -43,8 +42,6 @@ def task_page():
         if request.method == 'POST':
             if request.form['content'] == '' or request.form['point'] is None or request.form['listId'] == 0:
                 error = 'Please fill all required fields.'
-            elif int(request.form["point"]) < 0 or int(request.form["point"])  > 10:
-                error = 'Max and min values of a point is 10 and 0'
             else:
                 newTask = Task(request.form['content'],request.form['point'],request.form['listId'])
                 isSuccess = db.createTask(newTask)
