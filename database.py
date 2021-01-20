@@ -133,7 +133,6 @@ class Database:
         cursor.execute(sql, (taskId,))
         self.db.commit()   
 
-
     def AssignToMe(self,task_id):
         cursor = self.db.cursor(dictionary=True)
         user_id = session['user_id']
@@ -181,7 +180,6 @@ class Database:
         lists = cursor.fetchall()
         return lists
 
-
     def DeleteList(self,list_id):
         cursor = self.db.cursor(dictionary=True)
         sql = "DELETE FROM list WHERE ListId = %s"
@@ -195,11 +193,3 @@ class Database:
         sql = "DELETE FROM listmembers WHERE ListId = %s"
         cursor.execute(sql, (list_id,))
         self.db.commit()
-        
-
-
-
-    # def add_user(new_user):
-    #     self.last_user_key += 1 
-    #     self.users[self.last_user_key] = new_user #lists in ilk elemani list oldu
-    #     return self.last_user_key      

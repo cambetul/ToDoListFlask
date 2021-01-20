@@ -7,7 +7,6 @@ from task import Task
 import hashlib
 
 # db = current_app.config["db"]
-# cursor = db.cursor(dictionary=True)
 def getDb():
     return current_app.config["db"]
 
@@ -65,18 +64,6 @@ def task_page():
     else:
         return redirect(url_for("login_page"))
 
-
-# def list_add_page():
-#     if request.method == "GET":
-#         return render_template("list_edit.html", min_year=1887, max_year=datetime.now().year)
-#     else:
-#         form_title = request.form["title"]
-#         form_year = request.form["year"]
-#         list = List(form_title, year=int(form_year) if form_year else None)
-#         db = current_app.config["db"]
-#         list_key = db.add_list(list)
-#         return redirect(url_for("task_page", list_key=list_key))
-
 def list_add_page():
     if 'user_id' in session:
         db = getDb()
@@ -124,15 +111,6 @@ def register_page():
                     else:
                         error = 'Problem occured.'
         return render_template("register.html", error = error)
-    #else:
-    #    form_name = request.form.get("name")
-    #    form_surname = request.form.get("surname")
-    #    form_mail = request.form.get("mail")
-    #    form_password = request.form.get("password")
-    #    new_user = User(form_name,form_password) #burayı düzelt
-    #    db = current_app.config["db"]
-    #    user_key = db.add_user(new_user)
-    #    return redirect(url_for("home_page")
 
 def login_page():
     if('user_id' in session):  #cannot login again
@@ -174,7 +152,6 @@ def AssignToMe():
         db.AssignToMe(task_id)
     return jsonify(success=True) #başarılı mesajı dön
     
-    
 def AddMember():
     db = getDb()
     message = ''
@@ -193,14 +170,9 @@ def AddMember():
     lists = db.get_lists()
     return render_template("add_member.html", lists=lists, message = message)
             
-
-
 def DeleteList():
     db=getDb()
     if(request.method == 'POST'):
         list_id = request.form['ListId']
         db.DeleteList(list_id)
-    
     return jsonify(success=True) #başarılı mesajı dön
-
-
